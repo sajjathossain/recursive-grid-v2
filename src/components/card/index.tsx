@@ -1,30 +1,32 @@
-import { FC, useCallback, useState } from 'react';
+import { FC, memo, useCallback, useId, useState } from 'react';
+import { RiExpandLeftRightLine, RiExpandUpDownLine } from 'react-icons/ri';
+import { TCardButton, TMergeButton } from '../../lib/types';
+import { HiMiniBars2 } from 'react-icons/hi2';
 
-type TCardButton = {
-  onClick: (params?: { isHorizontal?: boolean }) => void;
-  isHorizontal?: boolean;
-};
-
-export type TCardProps =
-  | {
-      children: true;
-      isHorizontal?: boolean;
-    }
-  | {
-      children?: false;
-      isHorizontal?: boolean;
-    };
-
-const CardButton: FC<TCardButton> = ({ onClick, isHorizontal }) => (
+const CardButton: FC<TCardButton> = memo(({ onClick, isHorizontal }) => (
   <button
     className="text-white bg-emerald-500"
     onClick={() => onClick({ isHorizontal })}
   >
-    {isHorizontal ? 'h' : 'v'}
+    <HiMiniBars2 className={isHorizontal ? '' : 'rotate-90'} size={24} />
   </button>
-);
+));
 
-export const Card: FC = () => {
+const MergeButton: FC<TMergeButton> = memo(({ isHorizontal, onClick }) => (
+  <button
+    className="text-white bg-red-500 grid place-items-center"
+    onClick={onClick}
+  >
+    {isHorizontal ? (
+      <RiExpandUpDownLine size={32} />
+    ) : (
+      <RiExpandLeftRightLine size={32} />
+    )}
+  </button>
+));
+
+export const Card: FC = memo(() => {
+  const id = useId();
   const [nativeChild, setNativeChild] = useState<boolean>(false);
   const [isHorizontal, setIsHorizontal] = useState(false);
 
@@ -54,22 +56,18 @@ export const Card: FC = () => {
 
   return (
     <div
-      className={`relative w-fit border-2 border-emerald-500 rounded-lg flex gap-2 ${
-        isHorizontal ? 'flex-row' : 'flex-col'
-      } p-4`}
+      className={`relative w-auto border-2 border-emerald-500 rounded-lg flex justify-center gap-2 ${isHorizontal ? 'flex-row' : 'flex-col'
+        } p-4`}
     >
       <div
-        className={`flex gap-2 ${
-          isHorizontal ? 'flex-col' : 'flex-row'
-        } justify-center`}
+        className={`flex gap-2 ${isHorizontal ? 'flex-col' : 'flex-row'
+          } justify-center`}
       >
-        {[4, 1].map((i) => (
-          <Card key={i * Date.now()} />
+        {[1, 2].map((i) => (
+          <Card key={`${id}-${Date.now()}-${i}`} />
         ))}
       </div>
-      <button className="text-white bg-red-500" onClick={removeChild}>
-        x
-      </button>
+      <MergeButton onClick={removeChild} isHorizontal={isHorizontal} />
     </div>
   );
-};
+});
