@@ -1,4 +1,4 @@
-import { FC, memo, useCallback, useId, useState } from 'react';
+import { FC, memo, useCallback, useState } from 'react';
 import { RiExpandLeftRightLine, RiExpandUpDownLine } from 'react-icons/ri';
 import { TCardButton, TMergeButton } from '../../lib/types';
 import { HiMiniBars2 } from 'react-icons/hi2';
@@ -26,7 +26,6 @@ const MergeButton: FC<TMergeButton> = memo(({ isHorizontal, onClick }) => (
 ));
 
 export const Card: FC = memo(() => {
-  const id = useId();
   const [nativeChild, setNativeChild] = useState<boolean>(false);
   const [isHorizontal, setIsHorizontal] = useState(false);
 
@@ -63,9 +62,8 @@ export const Card: FC = memo(() => {
         className={`flex gap-2 ${isHorizontal ? 'flex-col' : 'flex-row'
           } justify-center`}
       >
-        {[1, 2].map((i) => (
-          <Card key={`${id}-${Date.now()}-${i}`} />
-        ))}
+        <Card />
+        <Card />
       </div>
       <MergeButton onClick={removeChild} isHorizontal={isHorizontal} />
     </div>
