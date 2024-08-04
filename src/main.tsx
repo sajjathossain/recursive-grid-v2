@@ -1,3 +1,9 @@
+import { Card } from './components';
+
 export function Main() {
-  return <h1 className="font-bold text-3xl text-red-500">Hello World</h1>;
+  return (
+    <div className="w-screen h-screen grid place-items-center bg-slate-200">
+      <Card />
+    </div>
+  );
 }
